@@ -24,7 +24,8 @@
 					// execution stack, for detecting 
 					// stack overflows
 
-int nextPid=100;
+int nextPid=1;
+int nextUserId=1;
 ThreadTable threadTable;
 
 //----------------------------------------------------------------------

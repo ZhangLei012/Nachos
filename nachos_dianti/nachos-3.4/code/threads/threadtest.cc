@@ -43,25 +43,14 @@ SimpleThread(int which)
 //	to call SimpleThread, and then calling SimpleThread ourselves.
 //----------------------------------------------------------------------
 
-void printInfo(){
-	for(int i=0;i<100;i++){
-		for(int j=0;j<100000;j++);
-		printf("i = %d\n",i);
-	}
-}
 void
 ThreadTest1()
 {
     DEBUG('t', "Entering ThreadTest1");
 
-	Thread *t2 = new Thread("printI thread");
-	t2->Fork(printInfo,(void *)100);
-
     Thread *t = new Thread("forked thread");
     t->Fork(SimpleThread, (void*)t->getPid());
 
-	
-	//t2->Finish();
     SimpleThread(currentThread->getPid());
 }
 
