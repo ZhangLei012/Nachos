@@ -107,14 +107,14 @@ Scheduler::Run (Thread *nextThread)
     
     DEBUG('t', "Switching from thread \"%s\" to thread \"%s\"\n",
 	  oldThread->getName(), nextThread->getName());
-    
+	
     // This is a machine-dependent assembly language routine defined 
     // in switch.s.  You may have to think
     // a bit to figure out what happens after this, both from the point
     // of view of the thread and from the perspective of the "outside world".
-	printf("before SWITCH:thread %s %d starts to SWITCH.\n",oldThread->getName(),oldThread->getPid());
+	DEBUG('t',"before SWITCH:thread \"%s\" pid = %d starts to SWITCH.\n",oldThread->getName(),oldThread->getPid());
     SWITCH(oldThread, nextThread);
- 	printf("After SWITCH:thread %s %d has been SWITCHED to CPU.\n",currentThread->getName(),currentThread->getPid());
+ 	DEBUG('t',"After SWITCH:thread \"%s\" %d has been SWITCHED to CPU.\n",currentThread->getName(),currentThread->getPid());
     DEBUG('t', "Now in thread \"%s\"\n", currentThread->getName());
 
     // If the old thread gave up the processor because it was finishing,
@@ -122,8 +122,10 @@ Scheduler::Run (Thread *nextThread)
     // before now (for example, in Thread::Finish()), because up to this
     // point, we were still running on the old thread's stack!
     if (threadToBeDestroyed != NULL) {
+		DEBUG('t'," currentThread: \"%s\" pid = %d\n",currentThread->getName(),currentThread->getPid());
+		DEBUG('t'," threadToBeDestroyed: \"%s\" pid = %d\n",threadToBeDestroyed->getName(),threadToBeDestroyed->getPid());
         delete threadToBeDestroyed;
-	threadToBeDestroyed = NULL;
+		threadToBeDestroyed = NULL;
     }
     
 #ifdef USER_PROGRAM

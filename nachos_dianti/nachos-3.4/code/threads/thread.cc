@@ -72,8 +72,7 @@ Thread::Thread(char* threadName)
 
 Thread::~Thread()
 {
-	printf("run %s %d ~Thread()\n",this->getName(),this->getPid());
-    DEBUG('t', "Deleting thread \"%s\"\n", name);
+    DEBUG('t', "Deleting thread \"%s\" pid = %d\n", name,getPid());
 	
     ASSERT(this != currentThread);
     if (stack != NULL)
@@ -171,7 +170,15 @@ Thread::Finish ()
     ASSERT(this == currentThread);
     
     DEBUG('t', "Finishing thread \"%s\"\n", getName());
-    
+	
+	
+    if (threadToBeDestroyed != NULL) {
+		DEBUG('t'," currentThread: %s pid = %d\n",currentThread->getName(),currentThread->getPid());
+		DEBUG('t'," threadToBeDestroyed: %s pid = %d\n",threadToBeDestroyed->getName(),threadToBeDestroyed->getPid());
+        delete threadToBeDestroyed;
+		threadToBeDestroyed = NULL;
+    }
+	
     threadToBeDestroyed = currentThread;
     Sleep();					// invokes SWITCH
     // not reached

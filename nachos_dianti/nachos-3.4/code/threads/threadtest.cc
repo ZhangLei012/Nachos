@@ -42,7 +42,16 @@ SimpleThread(int which)
 // 	Set up a ping-pong between two threads, by forking a thread 
 //	to call SimpleThread, and then calling SimpleThread ourselves.
 //----------------------------------------------------------------------
+void add(int a){
+	printf("1+1=2\n");
+	return;
+}
 
+void
+subtract(int a){
+	printf("1-1=0\n");
+	return ;
+}
 void
 ThreadTest1()
 {
@@ -51,7 +60,11 @@ ThreadTest1()
     Thread *t = new Thread("forked thread");
     t->Fork(SimpleThread, (void*)t->getPid());
 
-    SimpleThread(currentThread->getPid());
+	Thread *t2=new Thread("t2 thread");
+	t2->Fork(add,(void*)t2->getPid());
+	
+	Thread *t3 = new Thread("t3 thread");
+	t3->Fork(subtract,(void*)t3->getPid());
 }
 
 //----------------------------------------------------------------------

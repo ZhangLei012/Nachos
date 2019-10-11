@@ -33,14 +33,14 @@ Machine::Run()
     Instruction *instr = new Instruction;  // storage for decoded instruction
 	printf("Machine starts to run!\n");
     if(DebugIsEnabled('m'))
-        printf("Starting thread \"%s\" at time %d\n",currentThread->getName(), stats->totalTicks);
+        printf("Starting thread \"%s\" at time %s.\n",currentThread->getName(), stats->totalTicks);
     interrupt->setStatus(UserMode);
     for (;;) {
-		printf("Machine is running! Machine is running!\n");
+		printf("Machine is running! Machine is running! ",instr);
         OneInstruction(instr);
-	interrupt->OneTick();
-	if (singleStep && (runUntilTime <= stats->totalTicks))
-	  Debugger();
+		interrupt->OneTick();
+		if (singleStep && (runUntilTime <= stats->totalTicks))
+	  		Debugger();
     }
 }
 
@@ -103,16 +103,15 @@ Machine::OneInstruction(Instruction *instr)
 	return;			// exception occurred
     instr->value = raw;
     instr->Decode();
-
-    if (DebugIsEnabled('m')) {
+	
+    if (DebugIsEnabled('m')||true) {
        struct OpString *str = &opStrings[instr->opCode];
-
        ASSERT(instr->opCode <= MaxOpcode);
        printf("At PC = 0x%x: ", registers[PCReg]);
        printf(str->string, TypeToReg(str->args[0], instr), 
 		TypeToReg(str->args[1], instr), TypeToReg(str->args[2], instr));
        printf("\n");
-       }
+    }
     
     // Compute next pc, but don't install in case there's an error or branch.
     int pcAfter = registers[NextPCReg] + 4;
