@@ -24,7 +24,7 @@
 					// execution stack, for detecting 
 					// stack overflows
 
-int nextPid=1;
+int nextPid=107;
 int nextUserId=1;
 ThreadTable threadTable;
 
@@ -53,6 +53,8 @@ Thread::Thread(char* threadName)
     stack = NULL;
     status = JUST_CREATED;
 	pid=nextPid++;
+	uid=0;
+	priority=pid%5;
 #ifdef USER_PROGRAM
     space = NULL;
 #endif
@@ -116,9 +118,16 @@ Thread::Fork(VoidFunctionPtr func, void *arg)
     StackAllocate(func, arg);
 
     IntStatus oldLevel = interrupt->SetLevel(IntOff);
-    scheduler->ReadyToRun(this);	// ReadyToRun assumes that interrupts		?
-					// are disabled!
+	if(getPriority()>currentThread->getPriority()){
+		currentThread->setStatus(READY);
+		scheduler->ReadyToRun(currentThread);
+		scheduler->Run(this);
+	}
+    else{
+		scheduler->ReadyToRun(this);	// ReadyToRun assumes that interrupts		?
+	}				// are disabled!
     (void) interrupt->SetLevel(oldLevel);
+	
 }    
 
 //----------------------------------------------------------------------
@@ -214,8 +223,8 @@ Thread::Yield ()
     
     nextThread = scheduler->FindNextToRun();
     if (nextThread != NULL) {
-	scheduler->ReadyToRun(this);
-	scheduler->Run(nextThread);
+		scheduler->ReadyToRun(this);
+		scheduler->Run(nextThread);
     }
     (void) interrupt->SetLevel(oldLevel);
 }

@@ -56,7 +56,7 @@ Scheduler::ReadyToRun (Thread *thread)
     DEBUG('t', "Putting thread %s on ready list.\n", thread->getName());
 
     thread->setStatus(READY);
-    readyList->Append((void *)thread);
+    readyList->SortedInsert((void*)thread,thread->getPriority());
 }
 
 //----------------------------------------------------------------------
@@ -121,6 +121,7 @@ Scheduler::Run (Thread *nextThread)
     // we need to delete its carcass.  Note we cannot delete the thread
     // before now (for example, in Thread::Finish()), because up to this
     // point, we were still running on the old thread's stack!
+	
     if (threadToBeDestroyed != NULL) {
 		DEBUG('t'," currentThread: \"%s\" pid = %d\n",currentThread->getName(),currentThread->getPid());
 		DEBUG('t'," threadToBeDestroyed: \"%s\" pid = %d\n",threadToBeDestroyed->getName(),threadToBeDestroyed->getPid());

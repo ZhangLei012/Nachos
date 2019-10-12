@@ -104,6 +104,12 @@ class Thread {
 	int getPid(){
 		return pid;
 	}
+	int getUid(){
+		return uid;
+	}
+	int getPriority(){
+		return priority;
+	}
 	ThreadStatus getStatus(){
 		return status;
 	}
@@ -119,6 +125,8 @@ class Thread {
     ThreadStatus status;		// ready, running or blocked
     char* name;
 	int pid;
+	int uid;
+	int priority;
     void StackAllocate(VoidFunctionPtr func, void *arg);
     					// Allocate a stack for thread.
 					// Used internally by Fork()  my notes: internally = inside
@@ -155,11 +163,11 @@ class ThreadTable{
 			return;
 		}
 		void ThreadDump(){
-			char* state[4]={"JUST_CREATED", "RUNNING", "READY"," BLOCKED"};
-			printf("pid     name                state\n");
+			char* state[4]={"JUST_CREATED", "RUNNING", "READY","BLOCKED"};
+			printf("pid     name            state         uid       priority\n");
 			for(int i=0;i<MaxThreadNum;i++){
 				if(thread[i]){
-					printf("%-8d%-20s%-10s\n",thread[i]->getPid(),thread[i]->getName(),state[thread[i]->getStatus()]);
+					printf("%-8d%-16s%-14s%-10d%-10d\n",thread[i]->getPid(),thread[i]->getName(),state[thread[i]->getStatus()],thread[i]->getUid(),thread[i]->getPriority());
 				}
 			}
 			printf("\n");

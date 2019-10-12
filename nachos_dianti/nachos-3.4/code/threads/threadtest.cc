@@ -24,6 +24,7 @@ int testnum = 1;
 //	purposes.
 //----------------------------------------------------------------------
 extern ThreadTable threadTable;
+extern Thread* currentThread;
 void
 SimpleThread(int which)
 {
@@ -47,6 +48,18 @@ void add(int a){
 	return;
 }
 
+void printThreadInfo(int a){
+	printf("currentThread is: %s pid = %d\n",currentThread->getName(),currentThread->getPid());	
+	threadTable.ThreadDump();
+}
+void CreateNewThread(int a){
+	printThreadInfo(a);
+	Thread *t3 = new Thread("t3 thread");
+	t3->Fork(printThreadInfo,(void*)t3->getPid());
+	
+	Thread *t4=new Thread("t4 thread");
+	t4->Fork(printThreadInfo,(void*)t4->getPid());
+}
 void
 subtract(int a){
 	printf("1-1=0\n");
@@ -57,14 +70,8 @@ ThreadTest1()
 {
     DEBUG('t', "Entering ThreadTest1");
 
-    Thread *t = new Thread("forked thread");
-    t->Fork(SimpleThread, (void*)t->getPid());
-
 	Thread *t2=new Thread("t2 thread");
-	t2->Fork(add,(void*)t2->getPid());
-	
-	Thread *t3 = new Thread("t3 thread");
-	t3->Fork(subtract,(void*)t3->getPid());
+	t2->Fork(CreateNewThread,(void*)t2->getPid());
 }
 
 //----------------------------------------------------------------------
