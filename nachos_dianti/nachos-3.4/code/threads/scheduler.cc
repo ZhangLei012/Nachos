@@ -112,6 +112,8 @@ Scheduler::Run (Thread *nextThread)
     // in switch.s.  You may have to think
     // a bit to figure out what happens after this, both from the point
     // of view of the thread and from the perspective of the "outside world".
+	Print();
+	printf("\n");
 	DEBUG('t',"before SWITCH:thread \"%s\" pid = %d starts to SWITCH.\n",oldThread->getName(),oldThread->getPid());
     SWITCH(oldThread, nextThread);
  	DEBUG('t',"After SWITCH:thread \"%s\" %d has been SWITCHED to CPU.\n",currentThread->getName(),currentThread->getPid());

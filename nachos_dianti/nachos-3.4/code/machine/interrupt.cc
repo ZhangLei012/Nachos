@@ -161,7 +161,13 @@ Interrupt::OneTick()
 	stats->userTicks += UserTick;
     }
     DEBUG('i', "\n== Tick %d ==\n", stats->totalTicks);
-
+	if(stats->userTicks%TimeSlice==0){
+		Thread *nextThread=scheduler->FindNextToRun();
+		if(nextThread!=NULL){
+			scheduler->ReadyToRun(currentThread);
+			scheduler->Run(nextThread);
+		}
+	}
 // check any pending interrupts are now ready to fire
     ChangeLevel(IntOn, IntOff);		// first, turn off interrupts
 					// (interrupt handlers run with

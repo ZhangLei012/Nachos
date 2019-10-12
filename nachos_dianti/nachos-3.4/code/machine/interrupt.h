@@ -38,6 +38,7 @@
 #include "copyright.h"
 #include "list.h"
 
+#define TimeSlice 2
 // Interrupts can be disabled (IntOff) or enabled (IntOn)
 enum IntStatus { IntOff, IntOn };
 
