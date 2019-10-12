@@ -15,6 +15,6 @@
 int
 main()
 {
-    Halt();
+    Fork();
     /* not reached */
 }

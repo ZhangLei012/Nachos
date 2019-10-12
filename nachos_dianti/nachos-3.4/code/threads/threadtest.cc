@@ -59,6 +59,7 @@ void CreateNewThread(int a){
 	
 	Thread *t4=new Thread("t4 thread");
 	t4->Fork(printThreadInfo,(void*)t4->getPid());
+	threadTable.ThreadDump();
 }
 void
 subtract(int a){

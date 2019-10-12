@@ -119,7 +119,6 @@ Thread::Fork(VoidFunctionPtr func, void *arg)
 
     IntStatus oldLevel = interrupt->SetLevel(IntOff);
 	if(getPriority()>currentThread->getPriority()){
-		currentThread->setStatus(READY);
 		scheduler->ReadyToRun(currentThread);
 		scheduler->Run(this);
 	}
@@ -179,8 +178,7 @@ Thread::Finish ()
     ASSERT(this == currentThread);
     
     DEBUG('t', "Finishing thread \"%s\"\n", getName());
-	
-	
+
     if (threadToBeDestroyed != NULL) {
 		DEBUG('t'," currentThread: %s pid = %d\n",currentThread->getName(),currentThread->getPid());
 		DEBUG('t'," threadToBeDestroyed: %s pid = %d\n",threadToBeDestroyed->getName(),threadToBeDestroyed->getPid());
